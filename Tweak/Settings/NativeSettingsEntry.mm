@@ -323,31 +323,27 @@ static id YTKACENativeSearchRow(id settingsController) {
 }
 
 static id YTKACENativeSettingsItem(NSString *title,
-                                   id settingsController,
-                                   YTKACENativeBuilder builder) {
+                                   id settingsController) {
     Class itemClass = NSClassFromString(@"YTSettingsSectionItem");
     SEL selector = NSSelectorFromString(
         @"itemWithTitle:accessibilityIdentifier:detailTextBlock:selectBlock:");
     if (itemClass == Nil || ![itemClass respondsToSelector:selector]) return nil;
-    NSString *(^detail)(void) = builder == nil
-        ? (NSString *(^)(void))nil
-        : ^NSString *{ return @"›"; };
-    BOOL (^select)(id, NSUInteger) = builder == nil
-        ? (BOOL (^)(id, NSUInteger))nil
-        : ^BOOL(__unused id cell, __unused NSUInteger index) {
-            UIViewController *controller = builder();
-            if (controller == nil) return NO;
-            SEL push = NSSelectorFromString(@"pushViewController:");
-            if ([settingsController respondsToSelector:push]) {
-                ((void (*)(id, SEL, id))objc_msgSend)(settingsController, push, controller);
-                return YES;
-            }
-            UINavigationController *navigation =
-                [settingsController isKindOfClass:UIViewController.class]
-                    ? ((UIViewController *)settingsController).navigationController : nil;
-            [navigation pushViewController:controller animated:YES];
-            return navigation != nil;
-        };
+    NSString *(^detail)(void) = ^NSString *{ return @"›"; };
+    BOOL (^select)(id, NSUInteger) = ^BOOL(__unused id cell, __unused NSUInteger index) {
+        UINavigationController *navigation = YTKACEMakeSettingsNavigationController();
+        if ([settingsController respondsToSelector:NSSelectorFromString(@"pushViewController:")]) {
+            ((void (*)(id, SEL, id))objc_msgSend)(settingsController, NSSelectorFromString(@"pushViewController:"), navigation.viewControllers.firstObject);
+            return YES;
+        }
+        UINavigationController *presenter = [settingsController isKindOfClass:UIViewController.class]
+            ? ((UIViewController *)settingsController).navigationController : nil;
+        if (presenter != nil) {
+            [presenter presentViewController:navigation animated:YES completion:nil];
+            return YES;
+        }
+        [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:navigation animated:YES completion:nil];
+        return YES;
+    };
     SEL described = NSSelectorFromString(
         @"itemWithTitle:titleDescription:accessibilityIdentifier:detailTextBlock:"
          "selectBlock:");
@@ -362,33 +358,6 @@ static id YTKACENativeSettingsItem(NSString *title,
         item = ((id (*)(id, SEL, id, id, id, id))objc_msgSend)(
             itemClass, selector, localizedTitle, @"YTKACENativeSettingsItem",
             detail, select);
-    }
-    YTKACEApplyNativeSettingsIcon(item, title);
-    return item;
-}
-
-static id YTKACENativeSwitchItem(NSString *title, NSString *key) {
-    Class itemClass = NSClassFromString(@"YTSettingsSectionItem");
-    if (itemClass == Nil) return nil;
-    SEL switchSelector = NSSelectorFromString(
-        @"itemWithTitle:titleDescription:accessibilityIdentifier:switchState:switchBlock:");
-    NSString *subtitle = YTKACENativeSettingsSubtitle(title);
-    NSString *localizedTitle = YTKACELocalized(title);
-    BOOL initialState = YTKACEFeatureEnabled(key);
-
-    BOOL (^switchBlock)(id, BOOL) = ^BOOL(__unused id cell, BOOL isOn) {
-        YTKACESetPreference(key, isOn);
-        if ([key isEqualToString:YTKACEBackgroundPlaybackKey]) {
-            YTKACESetPreference(YTKACEPiPKey, isOn);
-        }
-        return YES;
-    };
-
-    id item = nil;
-    if ([itemClass respondsToSelector:switchSelector]) {
-        item = ((id (*)(id, SEL, id, id, id, BOOL, id))objc_msgSend)(
-            itemClass, switchSelector, localizedTitle, subtitle,
-            @"YTKACENativeSwitchItem", initialState, switchBlock);
     }
     YTKACEApplyNativeSettingsIcon(item, title);
     return item;
@@ -410,23 +379,13 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
     } @catch (__unused NSException *exception) {
         return;
     }
-    NSDictionary<NSString *, YTKACENativeBuilder> *builders = @{
-        @"hieucocc": [^UIViewController *{
-            NSURL *URL = [NSURL URLWithString:@"https://github.com/hieucocc/YouLitePlus"];
-            [UIApplication.sharedApplication openURL:URL options:@{}
-                                   completionHandler:nil];
-            return nil;
-        } copy]
-    };
 
     NSMutableArray *items = [NSMutableArray array];
     for (NSDictionary *definition in YTKACENativeLayout()) {
         NSString *kind = definition[@"kind"];
         NSString *title = definition[@"title"];
         id item = nil;
-        if ([kind isEqualToString:@"search"]) {
-            item = YTKACENativeSearchRow(settingsController);
-        } else if ([kind isEqualToString:@"header"]) {
+        if ([kind isEqualToString:@"header"]) {
             item = YTKACENativePlainItem(nil, YTKACELocalized(title));
             YTKACEMakeItemInert(item);
         } else if ([kind isEqualToString:@"footer"]) {
@@ -434,23 +393,8 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
                 stringByReplacingOccurrencesOfString:@"\n" withString:@"  •  "];
             item = YTKACENativePlainItem(nil, info);
             YTKACEMakeItemInert(item);
-        } else if ([title isEqualToString:@"Block YouTube Ads"]) {
-            item = YTKACENativeSwitchItem(title, YTKACENoAdsKey);
-        } else if ([title isEqualToString:@"Background Playback & PiP"]) {
-            item = YTKACENativeSwitchItem(title, YTKACEBackgroundPlaybackKey);
-        } else if ([title isEqualToString:@"SponsorBlock & DeArrow"]) {
-            item = YTKACENativeSwitchItem(title, YTKACESponsorBlockKey);
-        } else if ([title isEqualToString:@"Premium Logo"]) {
-            item = YTKACENativeSwitchItem(title, @"YTKACE.Preference.Navigation.PremiumLogo");
         } else {
-            item = YTKACENativeSettingsItem(title, settingsController, builders[title]);
-            if ([definition[@"developer"] boolValue] && item != nil) {
-                SEL setIdentifier = NSSelectorFromString(@"setAccessibilityIdentifier:");
-                if ([item respondsToSelector:setIdentifier]) {
-                    ((void (*)(id, SEL, id))objc_msgSend)(
-                        item, setIdentifier, @"YTKACEDeveloperItem");
-                }
-            }
+            item = YTKACENativeSettingsItem(title, settingsController);
         }
         if (item != nil) [items addObject:item];
     }
