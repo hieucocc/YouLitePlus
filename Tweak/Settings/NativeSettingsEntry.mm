@@ -337,11 +337,16 @@ static id YTKACENativeSettingsItem(NSString *title,
         }
         UINavigationController *presenter = [settingsController isKindOfClass:UIViewController.class]
             ? ((UIViewController *)settingsController).navigationController : nil;
-        if (presenter != nil) {
-            [presenter presentViewController:navigation animated:YES completion:nil];
-            return YES;
+        UIViewController *root = nil;
+        for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
+            if ([scene isKindOfClass:UIWindowScene.class] && scene.activationState == UISceneActivationStateForegroundActive) {
+                root = ((UIWindowScene *)scene).windows.firstObject.rootViewController;
+                if (root != nil) break;
+            }
         }
-        [UIApplication.sharedApplication.keyWindow.rootViewController presentViewController:navigation animated:YES completion:nil];
+        if (root != nil) {
+            [root presentViewController:navigation animated:YES completion:nil];
+        }
         return YES;
     };
     SEL described = NSSelectorFromString(
