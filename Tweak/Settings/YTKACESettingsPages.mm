@@ -956,32 +956,12 @@ willDisplayHeaderView:(UIView *)view
 - (void)documentPicker:(UIDocumentPickerViewController *)controller
 didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
     (void)controller;
-    if (_pickerMode == 3) {
-        if (_pendingBackupURL != nil) {
-            [NSFileManager.defaultManager removeItemAtURL:_pendingBackupURL error:nil];
-        }
-        _pendingBackupURL = nil;
-        _pickerMode = 0;
-        return;
+    (void)urls;
+    if (_pendingBackupURL != nil) {
+        [NSFileManager.defaultManager removeItemAtURL:_pendingBackupURL error:nil];
     }
-    if (urls.count == 0) return;
-    NSMutableArray<NSURL *> *scoped = [NSMutableArray array];
-    for (NSURL *URL in urls) {
-        if ([URL startAccessingSecurityScopedResource]) [scoped addObject:URL];
-    }
-    if (_pickerMode == 1) {
-        _restoreRunning = NO;
-        [self setBackupProgressVisible:NO message:nil];
-        _pickerMode = 0;
-        return;
-    }
-    for (NSURL *URL in scoped) [URL stopAccessingSecurityScopedResource];
-            NSString *message = error.localizedDescription ?: [NSString
-                stringWithFormat:YTKACELocalized(@"%lu items added to %@."),
-                (unsigned long)count, category];
-            [self showResult:error == nil ? YTKACELocalized(@"Import Complete") : YTKACELocalized(@"Import Failed")
-                      message:message];
-        }];
+    _pendingBackupURL = nil;
+    _pickerMode = 0;
 }
 
 - (void)colorPickerViewController:(UIColorPickerViewController *)viewController
