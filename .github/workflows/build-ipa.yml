@@ -96,4 +96,5 @@ jobs:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           ipa_file="${{ steps.inject.outputs.ipa }}"
-          gh release create "latest" "$ipa_file" --title "YouLite+ IPA Release" --notes "Direct .ipa download for YouLite+" --clobber || gh release upload "latest" "$ipa_file" --clobber
+          gh release delete "v1.0.0" --yes || true
+          gh release create "v1.0.0" "$ipa_file" --title "YouLite+ IPA Release" --notes "Direct .ipa download for YouLite+"
