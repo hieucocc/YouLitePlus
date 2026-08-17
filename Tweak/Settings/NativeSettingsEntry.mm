@@ -335,8 +335,6 @@ static id YTKACENativeSettingsItem(NSString *title,
             ((void (*)(id, SEL, id))objc_msgSend)(settingsController, NSSelectorFromString(@"pushViewController:"), navigation.viewControllers.firstObject);
             return YES;
         }
-        UINavigationController *presenter = [settingsController isKindOfClass:UIViewController.class]
-            ? ((UIViewController *)settingsController).navigationController : nil;
         UIViewController *root = nil;
         for (UIScene *scene in UIApplication.sharedApplication.connectedScenes) {
             if ([scene isKindOfClass:UIWindowScene.class] && scene.activationState == UISceneActivationStateForegroundActive) {
