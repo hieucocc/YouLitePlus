@@ -1,8 +1,6 @@
 #import "../../YTKACE.h"
 #import "../../Runtime/Hooking.h"
 #import "../../Runtime/Preferences.h"
-#import "../Downloads/DownloadLog.h"
-#import "../../Settings/YTKACEDownloadsController.h"
 #import "../../UI/Assets.h"
 #import "../Interface/NavigationVisibility.h"
 

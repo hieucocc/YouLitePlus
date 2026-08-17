@@ -9,7 +9,6 @@
 #import <math.h>
 #import <stdlib.h>
 #import <string.h>
-#import "../Downloads/DownloadLog.h"
 
 static NSString * const YTKACEFixPlaybackKey = @"YTKACE.Preference.Playback.Recovery";
 static NSString * const kNeedsRefetch = @"YTKACEPlaybackNeedsRefetch";
@@ -31,12 +30,7 @@ static NSTimeInterval gLastFailAt   = 0.0;
 
 static void FPLog(NSString *format, ...) NS_FORMAT_FUNCTION(1, 2);
 static void FPLog(NSString *format, ...) {
-    va_list args;
-    va_start(args, format);
-    NSString *message = [[NSString alloc] initWithFormat:format arguments:args];
-    va_end(args);
-    double t = gSessionStart > 0.0 ? (FPNow() - gSessionStart) : -1.0;
-    YTKACEDownloadLog(@"fixplay", @"t=%8.2f  %@", t, message);
+    (void)format;
 }
 
 static long gcState8, gcErrOverlay, gcExpiry, gcPlayability, gcHeartbeat, gcStall;

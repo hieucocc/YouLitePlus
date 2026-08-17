@@ -139,18 +139,10 @@ NSString *YTKACEDeviceInformationText(void) {
 }
 
 - (void)showDownloadLog {
-    [self.navigationController setNavigationBarHidden:NO animated:NO];
-    [self.navigationController pushViewController:
-        [YTKACEDownloadLogController new] animated:YES];
 }
 
 - (void)handleDeveloperHold:(UILongPressGestureRecognizer *)recognizer {
-    if (recognizer.state != UIGestureRecognizerStateBegan) return;
-    NSIndexPath *indexPath = [self.tableView indexPathForRowAtPoint:
-        [recognizer locationInView:self.tableView]];
-    if (indexPath.section == 4 && indexPath.row == 0) {
-        [self showDownloadLog];
-    }
+    (void)recognizer;
 }
 
 - (void)viewWillAppear:(BOOL)animated {
