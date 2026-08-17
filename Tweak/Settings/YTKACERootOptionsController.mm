@@ -29,16 +29,6 @@ static UIImage *YTKACETemplateImage(NSString *asset, NSString *symbol) {
         imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
 }
 
-static UIImage *YTKACESponsorIcon(void) {
-    return YTKACETemplateImage(@"sponsorblock_shield_template",
-                               @"play.shield");
-}
-
-static UIImage *YTKACEShortsIcon(void) {
-    return [YTKACEShortsImage(NO)
-        imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate];
-}
-
 static const void *YTKACEDismissTargetKey = &YTKACEDismissTargetKey;
 
 @interface YTKACEDismissTarget : NSObject
