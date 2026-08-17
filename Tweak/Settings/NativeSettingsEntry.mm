@@ -257,15 +257,7 @@ static void YTKACEMakeItemInert(id item) {
 @implementation YTKACEDeveloperHoldTarget
 
 - (void)handleHold:(UILongPressGestureRecognizer *)recognizer {
-    if (recognizer.state != UIGestureRecognizerStateBegan) return;
-    UIResponder *responder = self.cell;
-    while (responder != nil && ![responder isKindOfClass:UIViewController.class]) {
-        responder = responder.nextResponder;
-    }
-    UINavigationController *navigation =
-        ((UIViewController *)responder).navigationController;
-    if (navigation == nil) return;
-    [navigation pushViewController:YTKACEMakeDownloadLogController() animated:YES];
+    (void)recognizer;
 }
 
 @end
