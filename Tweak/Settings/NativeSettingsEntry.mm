@@ -12,8 +12,6 @@
 static const NSUInteger YTKACENativeSettingsCategory = 789;
 static const NSUInteger YTKACENativeSettingsGroup = 0x796b6163;
 static NSString *const YTKACEInertIdentifier = @"YTKACEInertItem";
-static const NSInteger YTKACESearchFieldTag = 0x5954534B;
-static const void *YTKACEDeveloperHoldKey = &YTKACEDeveloperHoldKey;
 static const void *YTKACESettingIconImageKey = &YTKACESettingIconImageKey;
 static IMP OriginalSettingsCategoryOrder;
 static IMP OriginalUpdateSettingsSection;
@@ -21,8 +19,6 @@ static IMP OriginalOrderedSettingsGroups;
 static IMP OriginalSettingsGroupTitle;
 static IMP OriginalOrderedGroupCategories;
 static IMP OriginalSettingsCellLayout;
-
-typedef UIViewController * _Nonnull (^YTKACENativeBuilder)(void);
 
 static NSArray<NSDictionary *> *YTKACENativeLayout(void) {
     return @[
