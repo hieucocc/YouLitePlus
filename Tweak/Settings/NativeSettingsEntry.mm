@@ -269,57 +269,7 @@ static void YTKACESettingsCellLayout(id receiver, SEL selector) {
     if (![receiver isKindOfClass:UIView.class]) return;
     UIView *cell = receiver;
     NSString *identifier = cell.accessibilityIdentifier;
-    UIView *host = cell;
-    if ([cell respondsToSelector:@selector(contentView)]) {
-        UIView *content = ((UIView *(*)(id, SEL))objc_msgSend)(
-            cell, @selector(contentView));
-        if (content != nil) host = content;
-    }
-    UISearchBar *field = (UISearchBar *)[host viewWithTag:YTKACESearchFieldTag];
-    if ([identifier isEqualToString:@"YTKACESearchItem"]) {
-        if (field == nil) {
-            field = [UISearchBar new];
-            field.tag = YTKACESearchFieldTag;
-            field.placeholder = YTKACELocalized(@"Search");
-            field.searchBarStyle = UISearchBarStyleMinimal;
-            field.userInteractionEnabled = NO;
-            [host addSubview:field];
-        }
-        field.frame = CGRectInset(host.bounds, -8.0, 0.0);
-        [host bringSubviewToFront:field];
-        cell.userInteractionEnabled = YES;
-        return;
-    }
-    if (field != nil) [field removeFromSuperview];
-    if ([identifier isEqualToString:@"YTKACEDeveloperItem"] &&
-        objc_getAssociatedObject(cell, YTKACEDeveloperHoldKey) == nil) {
-        YTKACEDeveloperHoldTarget *target = [YTKACEDeveloperHoldTarget new];
-        target.cell = cell;
-        UILongPressGestureRecognizer *hold =
-            [[UILongPressGestureRecognizer alloc] initWithTarget:target
-                                                          action:@selector(handleHold:)];
-        hold.minimumPressDuration = 4.0;
-        [cell addGestureRecognizer:hold];
-        objc_setAssociatedObject(cell, YTKACEDeveloperHoldKey, target,
-                                 OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    }
     cell.userInteractionEnabled = ![identifier isEqualToString:YTKACEInertIdentifier];
-}
-
-static id YTKACENativeSearchRow(id settingsController) {
-    Class itemClass = NSClassFromString(@"YTSettingsSectionItem");
-    SEL plain = NSSelectorFromString(
-        @"itemWithTitle:accessibilityIdentifier:detailTextBlock:selectBlock:");
-    if (itemClass == Nil || ![itemClass respondsToSelector:plain]) return nil;
-    __weak id weakController = settingsController;
-    BOOL (^select)(id, NSUInteger) = ^BOOL(__unused id cell, __unused NSUInteger index) {
-        id controller = weakController;
-        if (![controller isKindOfClass:UIViewController.class]) return NO;
-        YTKACEPresentSettingsSearchOverlay(controller);
-        return YES;
-    };
-    return ((id (*)(id, SEL, id, id, id, id))objc_msgSend)(
-        itemClass, plain, @" ", @"YTKACESearchItem", nil, [select copy]);
 }
 
 static id YTKACENativeSettingsItem(NSString *title,
