@@ -4,9 +4,9 @@ THEOS_PACKAGE_SCHEME ?= rootless
 
 include $(THEOS)/makefiles/common.mk
 
-LIBRARY_NAME = YTKACE
+LIBRARY_NAME = YouLitePlus
 
-YTKACE_FILES = \
+YouLitePlus_FILES = \
 	Tweak/Entry.mm \
 	Tweak/Runtime/Hooking.mm \
 	Tweak/Runtime/Preferences.mm \
@@ -20,73 +20,34 @@ YTKACE_FILES = \
 	Tweak/Features/SponsorBlock/SponsorPreferences.mm \
 	Tweak/Features/SponsorBlock/SponsorHooks.mm \
 	Tweak/Features/SponsorBlock/DeArrow.mm \
-	Tweak/Features/Downloads/StreamResolver.mm \
-	Tweak/Features/Downloads/SABRDownloader.mm \
-	Tweak/Features/Downloads/FFmpegMuxer.mm \
-	Tweak/Features/Downloads/YTKACEBackupManager.mm \
-	Tweak/Features/Downloads/YTKACEMediaImporter.mm \
-	Tweak/Features/Downloads/MediaArtwork.mm \
-	Tweak/Features/Downloads/DownloadLog.mm \
-	Tweak/Features/Downloads/DownloadProgressView.mm \
-	Tweak/Features/Downloads/DownloadCoordinator.mm \
-	Tweak/Features/Downloads/DownloadHooks.mm \
-	Tweak/Features/Downloads/YTKACEDownloadPlayerController.mm \
-	Tweak/Features/Downloads/YTKACEAudioPlayerController.mm \
-	Tweak/Features/Downloads/GlobalDownloadMiniPlayer.mm \
-	Tweak/Features/Appearance/OLEDHooks.mm \
 	Tweak/Features/Appearance/StartupHooks.mm \
 	Tweak/Features/Appearance/PremiumLogoHooks.mm \
 	Tweak/Features/Playback/BackgroundPlaybackHooks.mm \
 	Tweak/Features/Playback/PiPControls.mm \
-	Tweak/Features/Playback/SpeedControls.mm \
-	Tweak/Features/Playback/LoopControls.mm \
-	Tweak/Features/Playback/SleepTimerControls.mm \
-	Tweak/Features/Playback/DoubleTapHooks.mm \
-	Tweak/Features/Playback/FixPlaybackHooks.mm \
-	Tweak/Features/Playback/ProgressBarStyle.mm \
-	Tweak/Features/Streaming/StreamingHooks.mm \
-	Tweak/Features/Shorts/ShortsHooks.mm \
 	Tweak/Features/Compatibility/SideloadCompatibility.mm \
-	Tweak/Features/Compatibility/CastCompatibility.mm \
-	Tweak/Features/Onboarding/FirstLaunch.mm \
-	Tweak/Features/Navigation/TabBarHooks.mm \
-	Tweak/Features/Navigation/NavigationBehaviorHooks.mm \
-	Tweak/Features/Gestures/PlayerGestures.mm \
-	Tweak/Features/Interface/OverlayVisibilityHooks.mm \
-	Tweak/Features/Interface/ContentVisibilityHooks.mm \
-	Tweak/Features/Interface/MiscellaneousHooks.mm \
-	Tweak/Features/Interface/CopyCommentHooks.mm \
-	Tweak/Features/Interface/ProfilePictureViewer.mm \
-	Tweak/Features/Interface/NativeShareHooks.mm \
-	Tweak/Features/Interface/NavigationVisibility.mm \
 	Tweak/Settings/SettingsEntry.mm \
 	Tweak/Settings/NativeSettingsEntry.mm \
 	Tweak/Settings/YTKACERootOptionsController.mm \
 	Tweak/Settings/YTKACESettingsPages.mm \
-	Tweak/Settings/YTKACESettingsSearch.mm \
-	Tweak/Settings/YTKACETabEditorController.mm \
-	Tweak/Settings/YTKACEDownloadsController.mm
+	Tweak/Settings/YTKACESettingsSearch.mm
 
-YTKACE_CFLAGS = -fobjc-arc -Wall -Wextra -Werror=return-type
-YTKACE_CFLAGS += -DYTKACE_COMBINED_SABR=1
-YTKACE_CFLAGS += -Wno-module-import-in-extern-c
-YTKACE_CFLAGS += -I$(THEOS_PROJECT_DIR)/Vendor/FFmpeg/include
-YTKACE_CCFLAGS = -std=c++17
-YTKACE_FRAMEWORKS = Foundation UIKit AVFoundation AVKit AudioToolbox Photos QuartzCore MediaPlayer Security SystemConfiguration UniformTypeIdentifiers VideoToolbox CoreMedia
-YTKACE_LIBRARIES = z
-YTKACE_LDFLAGS = -Wl,-install_name,@rpath/YTKACE.dylib
-YTKACE_LDFLAGS += $(THEOS_PROJECT_DIR)/Vendor/FFmpeg/lib/libavformat.a
-YTKACE_LDFLAGS += $(THEOS_PROJECT_DIR)/Vendor/FFmpeg/lib/libavcodec.a
-YTKACE_LDFLAGS += $(THEOS_PROJECT_DIR)/Vendor/FFmpeg/lib/libavutil.a
-YTKACE_INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries
+YouLitePlus_CFLAGS = -fobjc-arc -Wall -Wextra -Werror=return-type
+YouLitePlus_CFLAGS += -Wno-module-import-in-extern-c
+YouLitePlus_CCFLAGS = -std=c++17
+YouLitePlus_FRAMEWORKS = Foundation UIKit AVFoundation AVKit AudioToolbox QuartzCore MediaPlayer Security SystemConfiguration CoreMedia
+YouLitePlus_LIBRARIES = z
+YouLitePlus_LDFLAGS = -Wl,-install_name,@rpath/YouLitePlus.dylib
+YouLitePlus_INSTALL_PATH = /Library/MobileSubstrate/DynamicLibraries
 
 include $(THEOS_MAKE_PATH)/library.mk
 
 after-all::
 	@mkdir -p "$(THEOS_PROJECT_DIR)/dist"
-	@cp "$(THEOS_OBJ_DIR)/YTKACE.dylib" "$(THEOS_PROJECT_DIR)/dist/YTKACE.dylib"
+	@cp "$(THEOS_OBJ_DIR)/YouLitePlus.dylib" "$(THEOS_PROJECT_DIR)/dist/YouLitePlus.dylib"
 
 after-stage::
 	@mkdir -p "$(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries"
 	@cp -R "$(THEOS_PROJECT_DIR)/Resources/YTKACE.bundle" "$(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries/YTKACE.bundle"
-	@cp "$(THEOS_PROJECT_DIR)/YTKACE.plist" "$(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries/YTKACE.plist"
+	@cp "$(THEOS_PROJECT_DIR)/YouLitePlus.plist" "$(THEOS_STAGING_DIR)/Library/MobileSubstrate/DynamicLibraries/YouLitePlus.plist"
+
+

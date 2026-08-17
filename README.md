@@ -1,90 +1,35 @@
-# YTKACE
+# YouLite+
 
-An open-source YouTube enhancement for iOS.
+Customized open-source YouTube enhancement for iOS by **hieucocc**.
 
 ## Features
 
 | Area | Included |
 |---|---|
-| Downloads | Video, audio and Shorts downloads; queues; sorting; backup and restore |
 | Playback | Background playback, PiP, loop, speed controls, default speed, gestures and tap to seek |
-| SponsorBlock | Category controls, progress markers, skip modes and configurable alerts |
 | Interface | OLED mode, overlay controls, navigation cleanup and native share sheets |
 | Tabs | Hide, reorder and add YouTube destinations |
-| Library | Downloaded video, Shorts and audio players with resume support |
+| SponsorBlock | Category controls, progress markers, skip modes and configurable alerts |
+| Downloads | Video, audio and Shorts downloads |
 | Settings | Searchable settings, 15 languages and a native YouTube settings section |
 
 ## Compatibility
 
 - **iOS:** 16.0 and newer
 - **Architecture:** arm64
-- **Latest confirmed YouTube:** 21.32.4
-- **YTKACE:** 0.8.4
+- **YouLite+:** 1.0.0
 
-The same injected IPA can be installed with TrollStore or a developer-certificate sideloader.
+The injected IPA can be installed with TrollStore or a developer-certificate sideloader (AltStore, SideStore, LiveContainer).
 
-## Install
+## Build IPA with GitHub Actions
 
-**Jailbroken.** Add the repository in Sileo, Zebra or Cydia:
-
-```
-https://itzzace.github.io/ytkace/
-```
-
-Rootless and roothide packages are both published. The repository page also has an
-[Add to Sileo](https://itzzace.github.io/ytkace/) button.
-
-**Sideloaded.** Download the IPA from the [latest release](https://github.com/itzzace/ytkace/releases/latest)
-and install it with TrollStore, AltStore, SideStore or LiveContainer.
-
-## Build
-
-Fork the repository, enable Actions, open the **IPA** workflow and provide a direct link to a decrypted YouTube IPA you are legally allowed to use. The completed workflow provides the injected IPA as an artifact. The **Deb** workflow builds the tweak package.
-
-## Settings
-
-Open the YTKACE tab and tap the gear, or open YouTube Settings and choose YTKACE.
-Both pages carry the same options, and the YouTube Settings section has a search bar.
-
-## Screenshots
-
-<p align="center">
-  <img src="screenshots/framed/settings.png" width="220" alt="YTKACE settings">
-  <img src="screenshots/framed/video-download-menu.png" width="220" alt="Video download menu">
-  <img src="screenshots/framed/audio-player.png" width="220" alt="Audio player">
-</p>
-
-<p align="center">
-  <sub>Settings · Downloads · Audio Player</sub>
-</p>
-
-<details>
-  <summary>More screenshots</summary>
-  <br>
-  <p align="center">
-    <img src="screenshots/framed/shorts-download-menu.png" width="190" alt="Shorts download menu">
-    <img src="screenshots/framed/tab-editor.png" width="190" alt="Tab editor">
-    <img src="screenshots/framed/download-progress.png" width="190" alt="Download progress">
-  </p>
-  <p align="center">
-    <img src="screenshots/framed/download-library.png" width="190" alt="Download library">
-    <img src="screenshots/framed/video-player.png" width="190" alt="Downloaded video player">
-    <img src="screenshots/framed/player-settings.png" width="190" alt="Player settings">
-  </p>
-  <p align="center">
-    <img src="screenshots/framed/sponsorblock-settings.png" width="190" alt="SponsorBlock settings">
-    <img src="screenshots/framed/audio-queue.png" width="190" alt="Audio queue">
-  </p>
-</details>
-
-## Privacy
-
-YTKACE has no activation service, analytics, telemetry or updater.
-
-## A note to iKarwan
-
-YTKACE 0.8.4 contains zero YTKPlus code. It was independently written with its own UI, assets, and structure, and copyright does not cover features or general similarities alone. I would have preferred to discuss this privately, but I was blocked on Telegram before the claims were made publicly through tweets and a DMCA notice. If you believe any copyrighted material remains, please show me exactly where and I will review it.
+1. Push this source code to your GitHub repository (e.g. `YouLitePlus`).
+2. Go to the **Actions** tab on your GitHub repository.
+3. Select the **IPA** workflow.
+4. Click **Run workflow** (provide a direct link to a decrypted YouTube IPA if needed).
+5. Once complete, download your `YouLitePlus_*.ipa` artifact from the workflow run!
 
 ## License
 
-YTKACE source is available under the [MIT License](LICENSE). See [Third-Party Notices](THIRD_PARTY_NOTICES.md) for components and services with separate terms.
+Source code is available under the [MIT License](LICENSE).
+

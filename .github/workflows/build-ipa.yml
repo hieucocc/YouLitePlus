@@ -24,7 +24,7 @@ jobs:
 
       - uses: actions/download-artifact@v8
         with:
-          name: YTKACE-deb-rootless
+          name: YouLitePlus-deb-rootless
           path: packages
 
       - uses: levibostian/action-hide-sensitive-inputs@v1
@@ -67,13 +67,14 @@ jobs:
               print(plistlib.loads(archive.read(info))['CFBundleShortVersionString'])
           PY
           )"
-          output="YTKACE_${tweak_version}_YouTube_${youtube_version}.ipa"
-          bash Scripts/sideload-repack.sh YouTube.ipa deb-root/var/jb/Library/MobileSubstrate/DynamicLibraries/YTKACE.dylib "$output"
-          bash Tools/verify-artifacts.sh deb-root/var/jb/Library/MobileSubstrate/DynamicLibraries/YTKACE.dylib "$output"
+          output="YouLitePlus_${tweak_version}_YouTube_${youtube_version}.ipa"
+          bash Scripts/sideload-repack.sh YouTube.ipa deb-root/var/jb/Library/MobileSubstrate/DynamicLibraries/YouLitePlus.dylib "$output"
+          bash Tools/verify-artifacts.sh deb-root/var/jb/Library/MobileSubstrate/DynamicLibraries/YouLitePlus.dylib "$output"
           echo "ipa=$output" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@v7
         with:
-          name: YTKACE-IPA
+          name: YouLitePlus-IPA
           path: ${{ steps.inject.outputs.ipa }}
           if-no-files-found: error
+

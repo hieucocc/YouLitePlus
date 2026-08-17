@@ -55,20 +55,20 @@ class MachOInjectTests(unittest.TestCase):
     def test_replaces_legacy_load(self):
         rewritten = MACHO.rewrite(
             fixture(),
-            "@rpath/YTKACE.dylib",
+            "@rpath/YouLitePlus.dylib",
             ["LegacyTweak.dylib"],
         )
-        self.assertEqual(MACHO.list_dylibs(rewritten), [["@rpath/YTKACE.dylib"]])
+        self.assertEqual(MACHO.list_dylibs(rewritten), [["@rpath/YouLitePlus.dylib"]])
 
     def test_is_idempotent(self):
         first = MACHO.rewrite(
             fixture(),
-            "@rpath/YTKACE.dylib",
+            "@rpath/YouLitePlus.dylib",
             ["LegacyTweak.dylib"],
         )
         second = MACHO.rewrite(
             first,
-            "@rpath/YTKACE.dylib",
+            "@rpath/YouLitePlus.dylib",
             ["LegacyTweak.dylib"],
         )
         self.assertEqual(first, second)
@@ -79,7 +79,8 @@ class MachOInjectTests(unittest.TestCase):
         self.assertEqual(count, 2)
         tight = fixture(32 + size)
         with self.assertRaises(MACHO.MachOError):
-            MACHO.rewrite(tight, "@rpath/YTKACE.dylib", [])
+            MACHO.rewrite(tight, "@rpath/YouLitePlus.dylib", [])
+
 
 
 if __name__ == "__main__":

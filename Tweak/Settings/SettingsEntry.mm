@@ -128,7 +128,7 @@ static void YTKACERightButtonsLayoutSubviews(UIView *receiver, SEL selector) {
     [button setImage:[YTKACEGearImage()
         imageWithRenderingMode:UIImageRenderingModeAlwaysTemplate]
              forState:UIControlStateNormal];
-    button.accessibilityLabel = @"YTKACE Settings";
+    button.accessibilityLabel = @"YouLite+ Settings";
     [button addTarget:YTKACESettingsPresenter.sharedPresenter
                action:@selector(openSettings)
      forControlEvents:UIControlEventTouchUpInside];

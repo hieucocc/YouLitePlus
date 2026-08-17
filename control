@@ -1,11 +1,12 @@
-Package: com.itzzace.ytkace
-Name: YTKACE
-Version: 0.8.4
+Package: com.hieucocc.youliteplus
+Name: YouLite+
+Version: 1.0.0
 Architecture: iphoneos-arm64
-Description: Open-source YouTube enhancement with downloads, SponsorBlock, background playback and interface controls
-Maintainer: itzzace
-Author: itzzace
+Description: Minimalist YouTube enhancement for iOS by hieucocc (forked from YTKACE by itzzace)
+Maintainer: hieucocc
+Author: hieucocc (based on YTKACE by itzzace)
 Section: Tweaks
 Depends: mobilesubstrate | ellekit, firmware (>= 16.0)
-Homepage: https://github.com/itzzace/ytkace
+Homepage: https://github.com/hieucocc/YouLitePlus
+
 Tag: role::enduser

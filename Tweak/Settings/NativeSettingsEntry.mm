@@ -27,24 +27,13 @@ typedef UIViewController * _Nonnull (^YTKACENativeBuilder)(void);
 
 static NSArray<NSDictionary *> *YTKACENativeLayout(void) {
     return @[
-        @{@"kind": @"search"},
-        @{@"kind": @"row", @"title": @"Downloads & Library"},
-        @{@"kind": @"header", @"title": @"MAIN"},
-        @{@"kind": @"row", @"title": @"Player"},
-        @{@"kind": @"row", @"title": @"SponsorBlock"},
-        @{@"kind": @"row", @"title": @"Tabs"},
-        @{@"kind": @"row", @"title": @"Gestures"},
-        @{@"kind": @"header", @"title": @"VIDEO"},
-        @{@"kind": @"row", @"title": @"Overlay"},
-        @{@"kind": @"row", @"title": @"Playback"},
-        @{@"kind": @"row", @"title": @"Shorts"},
-        @{@"kind": @"row", @"title": @"Wi-Fi Quality"},
-        @{@"kind": @"row", @"title": @"Cellular Quality"},
-        @{@"kind": @"header", @"title": @"APP"},
-        @{@"kind": @"row", @"title": @"Navigation"},
-        @{@"kind": @"row", @"title": @"Other"},
+        @{@"kind": @"header", @"title": @"FEATURES"},
+        @{@"kind": @"row", @"title": @"Block YouTube Ads"},
+        @{@"kind": @"row", @"title": @"Background Playback & PiP"},
+        @{@"kind": @"row", @"title": @"SponsorBlock & DeArrow"},
+        @{@"kind": @"row", @"title": @"Premium Logo"},
         @{@"kind": @"header", @"title": @"ABOUT"},
-        @{@"kind": @"row", @"title": @"itzzace", @"developer": @YES},
+        @{@"kind": @"row", @"title": @"hieucocc", @"developer": @YES},
         @{@"kind": @"footer"}
     ];
 }
@@ -75,7 +64,7 @@ static NSArray *YTKACEOrderedSettingsGroups(id receiver, SEL selector) {
 }
 
 static NSString *YTKACESettingsGroupTitle(id receiver, SEL selector, NSUInteger type) {
-    if (type == YTKACENativeSettingsGroup) return @"YTKACE";
+    if (type == YTKACENativeSettingsGroup) return @"YouLite+";
     return OriginalSettingsGroupTitle == NULL ? nil :
         ((id (*)(id, SEL, NSUInteger))OriginalSettingsGroupTitle)(receiver, selector, type);
 }
@@ -91,17 +80,11 @@ static NSString *YTKACENativeSettingsSubtitle(NSString *title) {
     static dispatch_once_t onceToken;
     dispatch_once(&onceToken, ^{
         subtitles = @{
-            @"Downloads & Library": @"Saved video, audio, Shorts, imports and backups",
-            @"Player": @"Download, PiP, loop, speed and progress controls",
-            @"SponsorBlock": @"Segments, alerts, colors and DeArrow",
-            @"Overlay": @"Player buttons, captions and watch-page cleanup",
-            @"Playback": @"Quality menu, autoplay and skip timing",
-            @"Shorts": @"Playback, feed and action buttons",
-            @"Navigation": @"Top buttons, branding and topic chips",
-            @"Tabs": @"Choose and reorder bottom tabs",
-            @"Gestures": @"Brightness, volume, hold and tap to seek",
-            @"Other": @"OLED, startup, sharing, layout and prompts",
-            @"itzzace": @"Developer"
+            @"Block YouTube Ads": @"Remove all native video and banner ads",
+            @"Background Playback & PiP": @"Play audio in background and enable PiP",
+            @"SponsorBlock & DeArrow": @"Automatically skip sponsored segments",
+            @"Premium Logo": @"Display YouTube Premium logo",
+            @"hieucocc": @"Forked from YTKACE by itzzace"
         };
     });
     NSString *value = subtitles[title];
@@ -201,7 +184,7 @@ static UIImage *YTKACENativeSettingsIconImage(NSString *title) {
             @"Wi-Fi Quality": @"wifi",
             @"Cellular Quality": @"antenna.radiowaves.left.and.right",
             @"Other": @"ellipsis.circle",
-            @"itzzace": @"person.crop.circle"
+            @"hieucocc": @"person.crop.circle"
         };
     });
     NSString *symbol = symbols[title];
@@ -426,8 +409,8 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
         @"Wi-Fi Quality": [^UIViewController *{ return YTKACEMakeWiFiQualityController(); } copy],
         @"Cellular Quality": [^UIViewController *{ return YTKACEMakeCellularQualityController(); } copy],
         @"Other": [^UIViewController *{ return YTKACEMakeMiscOptionsController(); } copy],
-        @"itzzace": [^UIViewController *{
-            NSURL *URL = [NSURL URLWithString:@"https://github.com/itzzace/ytkace"];
+        @"hieucocc": [^UIViewController *{
+            NSURL *URL = [NSURL URLWithString:@"https://github.com/hieucocc/YouLitePlus"];
             [UIApplication.sharedApplication openURL:URL options:@{}
                                    completionHandler:nil];
             return nil;
@@ -473,10 +456,10 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
             ((void (*)(id, SEL, NSInteger))objc_msgSend)(icon, setIconType, 44);
         }
         ((void (*)(id, SEL, id, NSUInteger, id, id, id, BOOL))objc_msgSend)(
-            settingsController, modern, items, category, @"YTKACE", icon, nil, NO);
+            settingsController, modern, items, category, @"YouLite+", icon, nil, NO);
     } else if ([settingsController respondsToSelector:legacy]) {
         ((void (*)(id, SEL, id, NSUInteger, id, id, BOOL))objc_msgSend)(
-            settingsController, legacy, items, category, @"YTKACE", nil, NO);
+            settingsController, legacy, items, category, @"YouLite+", nil, NO);
     }
 }
 

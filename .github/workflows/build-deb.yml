@@ -59,13 +59,14 @@ jobs:
         run: |
           deb="$(ls packages/*.deb | head -1)"
           version="$(awk '/^Version:/ {print $2}' control)"
-          output="com.itzzace.ytkace_${version}_${{ matrix.suffix }}.deb"
+          output="com.hieucocc.youliteplus_${version}_${{ matrix.suffix }}.deb"
           mkdir -p artifacts
           cp "$deb" "artifacts/$output"
           echo "deb=artifacts/$output" >> "$GITHUB_OUTPUT"
 
       - uses: actions/upload-artifact@v7
         with:
-          name: YTKACE-deb-${{ matrix.suffix }}
+          name: YouLitePlus-deb-${{ matrix.suffix }}
           path: ${{ steps.name.outputs.deb }}
           if-no-files-found: error
+
