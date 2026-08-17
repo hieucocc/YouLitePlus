@@ -418,12 +418,7 @@ static id YTKACEShortsPlayerResponseFromObject(id object) {
     return target;
 }
 - (void)downloadTapped:(UIButton *)sender {
-    [YTKACEShortsBarrenClasses removeAllObjects];
-    id fromView = YTKACEShortsPlayerResponseFromObject(sender);
-    id response = fromView ?: YTKACELatestShortsPlayerResponse;
-    YTKACEDownloadCoordinator.sharedCoordinator.playerResponse = response;
-    [YTKACEDownloadCoordinator.sharedCoordinator
-        showShortsDownloadMenuFromView:sender];
+    (void)sender;
 }
 @end
 

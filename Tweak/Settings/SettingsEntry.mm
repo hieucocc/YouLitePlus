@@ -109,7 +109,6 @@ static void YTKACERightButtonsLayoutSubviews(UIView *receiver, SEL selector) {
         ((void (*)(id, SEL))OriginalRightButtonsLayoutSubviews)(receiver, selector);
     }
     if (objc_getAssociatedObject(receiver, YTKACESettingsButtonAssociation) != nil) {
-        YTKACEApplyRightNavigationVisibility(receiver);
         return;
     }
 
@@ -140,7 +139,6 @@ static void YTKACERightButtonsLayoutSubviews(UIView *receiver, SEL selector) {
                              YTKACESettingsButtonAssociation,
                              button,
                              OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-    YTKACEApplyRightNavigationVisibility(receiver);
 }
 
 void YTKACEInstallSettingsEntryHooks(void) {

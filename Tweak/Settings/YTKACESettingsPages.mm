@@ -1,12 +1,9 @@
 #import "YTKACESettingsPages.h"
 #import "YTKACERootOptionsController.h"
-#import "YTKACETabEditorController.h"
 #import "../Runtime/Preferences.h"
 #import "../Runtime/Localization.h"
 #import "../UI/Assets.h"
 #import "../UI/Notice.h"
-#import "../Features/Downloads/YTKACEBackupManager.h"
-#import "../Features/Downloads/YTKACEMediaImporter.h"
 #import "../Features/SponsorBlock/SponsorPreferences.h"
 #import "../Features/SponsorBlock/DeArrow.h"
 
@@ -973,23 +970,12 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
         if ([URL startAccessingSecurityScopedResource]) [scoped addObject:URL];
     }
     if (_pickerMode == 1) {
-        _restoreRunning = YES;
-        [self setBackupProgressVisible:YES message:YTKACELocalized(@"Restoring Backup...")];
-        [YTKACEBackupManager restoreBackupFromURL:urls.firstObject
-            completion:^(NSError *error) {
-                for (NSURL *URL in scoped) [URL stopAccessingSecurityScopedResource];
-                self->_restoreRunning = NO;
-                [self setBackupProgressVisible:NO message:nil];
-                [self showResult:error == nil ? YTKACELocalized(@"Backup Restored") : YTKACELocalized(@"Restore Failed")
-                          message:error.localizedDescription];
-            }];
+        _restoreRunning = NO;
+        [self setBackupProgressVisible:NO message:nil];
         _pickerMode = 0;
         return;
     }
-    NSString *category = _importCategory ?: YTKACELocalized(@"Video");
-    [YTKACEMediaImporter importURLs:urls category:category
-        completion:^(NSUInteger count, NSError *error) {
-            for (NSURL *URL in scoped) [URL stopAccessingSecurityScopedResource];
+    for (NSURL *URL in scoped) [URL stopAccessingSecurityScopedResource];
             NSString *message = error.localizedDescription ?: [NSString
                 stringWithFormat:YTKACELocalized(@"%lu items added to %@."),
                 (unsigned long)count, category];
@@ -1107,29 +1093,8 @@ didPickDocumentsAtURLs:(NSArray<NSURL *> *)urls {
 }
 
 - (void)performBackup {
-    if (_backupRunning) return;
-    _backupRunning = YES;
-    [self setBackupProgressVisible:YES message:YTKACELocalized(@"Preparing Backup...")];
-    __weak YTKACEOptionsController *weakSelf = self;
-    [YTKACEBackupManager createBackupWithCompletion:^(NSURL *URL, NSError *error) {
-        YTKACEOptionsController *controller = weakSelf;
-        if (controller == nil) return;
-        controller->_backupRunning = NO;
-        [controller setBackupProgressVisible:NO message:nil];
-        if (URL == nil || error != nil) {
-            NSString *message = error.localizedDescription ?: YTKACELocalized(@"The backup could not be created.");
-            if (!YTKACEShowYouTubeDialog(YTKACELocalized(@"Backup Failed"), message)) {
-                [controller showResult:YTKACELocalized(@"Backup Failed") message:message];
-            }
-            return;
-        }
-        UIDocumentPickerViewController *picker = [[UIDocumentPickerViewController alloc]
-            initForExportingURLs:@[URL] asCopy:YES];
-        controller->_pickerMode = 3;
-        controller->_pendingBackupURL = URL;
-        picker.delegate = controller;
-        [controller presentViewController:picker animated:YES completion:nil];
-    }];
+    _backupRunning = NO;
+    [self setBackupProgressVisible:NO message:nil];
 }
 
 - (void)beginBackup {
@@ -1359,7 +1324,7 @@ static NSDictionary *YTKACEPlayerControlsDefinition(void) {
 }
 
 UIViewController *YTKACEMakeTabBarOptionsController(void) {
-    return [YTKACETabEditorController new];
+    return nil;
 }
 
 static NSDictionary *YTKACEOverlayOptionsDefinition(void) {

@@ -2,7 +2,6 @@
 #import "YTKACESettingsSearch.h"
 #import "../Runtime/Localization.h"
 #import "YTKACERootOptionsController.h"
-#import "YTKACEDownloadsController.h"
 #import "../Runtime/Hooking.h"
 #import "../UI/Assets.h"
 
@@ -393,22 +392,6 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
         return;
     }
     NSDictionary<NSString *, YTKACENativeBuilder> *builders = @{
-        @"Downloads & Library": [^UIViewController *{
-            YTKACEDownloadsController *controller = [YTKACEDownloadsController new];
-            controller.hidesSettingsButton = YES;
-            return controller;
-        } copy],
-        @"Player": [^UIViewController *{ return YTKACEMakePlayerControlsController(); } copy],
-        @"SponsorBlock": [^UIViewController *{ return YTKACEMakeSponsorBlockController(); } copy],
-        @"Overlay": [^UIViewController *{ return YTKACEMakeOverlayOptionsController(); } copy],
-        @"Playback": [^UIViewController *{ return YTKACEMakeStreamingOptionsController(); } copy],
-        @"Shorts": [^UIViewController *{ return YTKACEMakeShortsOptionsController(); } copy],
-        @"Navigation": [^UIViewController *{ return YTKACEMakeNavigationOptionsController(); } copy],
-        @"Tabs": [^UIViewController *{ return YTKACEMakeTabBarOptionsController(); } copy],
-        @"Gestures": [^UIViewController *{ return YTKACEMakeGestureOptionsController(); } copy],
-        @"Wi-Fi Quality": [^UIViewController *{ return YTKACEMakeWiFiQualityController(); } copy],
-        @"Cellular Quality": [^UIViewController *{ return YTKACEMakeCellularQualityController(); } copy],
-        @"Other": [^UIViewController *{ return YTKACEMakeMiscOptionsController(); } copy],
         @"hieucocc": [^UIViewController *{
             NSURL *URL = [NSURL URLWithString:@"https://github.com/hieucocc/YouLitePlus"];
             [UIApplication.sharedApplication openURL:URL options:@{}

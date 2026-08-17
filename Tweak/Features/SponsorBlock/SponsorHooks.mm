@@ -4,7 +4,6 @@
 #import "../../Runtime/Hooking.h"
 #import "../../Runtime/Preferences.h"
 #import "../../Runtime/Localization.h"
-#import "../Downloads/DownloadLog.h"
 #import "../../UI/Assets.h"
 
 #import <QuartzCore/QuartzCore.h>
@@ -539,8 +538,6 @@ static void YTKACEPlayerBarLayout(UIView *receiver, SEL selector) {
         ((void (*)(id, SEL))OriginalPlayerBarLayout)(receiver, selector);
     }
 
-    YTKACEConfigureTapToSeek(receiver);
-
     [YTKACESponsorBars addObject:receiver];
     UIView *target = receiver;
     for (UIView *subview in receiver.subviews) {
@@ -557,7 +554,6 @@ static void YTKACEMiniplayerBarLayout(UIView *receiver, SEL selector) {
         ((void (*)(id, SEL))OriginalMiniplayerBarLayout)(receiver, selector);
     }
     [YTKACESponsorBars addObject:receiver];
-    YTKACEApplyProgressStyleToBar(receiver);
     YTKACERenderSponsorMarkers(receiver, receiver, YES);
 }
 

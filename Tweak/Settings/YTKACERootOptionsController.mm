@@ -1,12 +1,10 @@
 #import "YTKACERootOptionsController.h"
 #import "../YTKACE.h"
-#import "YTKACEDownloadsController.h"
 #import "YTKACESettingsPages.h"
 #import "../Runtime/Preferences.h"
 #import "../Runtime/Localization.h"
 #import "../UI/Assets.h"
 #import "../UI/Notice.h"
-#import "../Features/Downloads/DownloadLog.h"
 
 #import <objc/runtime.h>
 #import <stdlib.h>
@@ -102,73 +100,6 @@ void YTKACEApplyAppearance(UIViewController *controller) {
     }
 }
 
-@interface YTKACEDownloadLogController : UIViewController
-@property(nonatomic, strong) UITextView *textView;
-@end
-
-@implementation YTKACEDownloadLogController
-
-- (void)viewDidLoad {
-    [super viewDidLoad];
-    self.title = YTKACELocalized(@"Download Log");
-    self.textView = [[UITextView alloc] initWithFrame:self.view.bounds];
-    self.textView.autoresizingMask = UIViewAutoresizingFlexibleWidth |
-        UIViewAutoresizingFlexibleHeight;
-    self.textView.editable = NO;
-    self.textView.font = [UIFont monospacedSystemFontOfSize:13.0
-        weight:UIFontWeightRegular];
-    self.textView.textContainerInset = UIEdgeInsetsMake(14.0, 14.0, 14.0, 14.0);
-    [self.view addSubview:self.textView];
-    self.navigationItem.rightBarButtonItems = @[
-        [[UIBarButtonItem alloc] initWithTitle:YTKACELocalized(@"Clear") style:UIBarButtonItemStylePlain
-            target:self action:@selector(clearLog)],
-        [[UIBarButtonItem alloc] initWithTitle:YTKACELocalized(@"Share") style:UIBarButtonItemStylePlain
-            target:self action:@selector(shareLog)],
-        [[UIBarButtonItem alloc] initWithTitle:YTKACELocalized(@"Copy") style:UIBarButtonItemStylePlain
-            target:self action:@selector(copyLog)]
-    ];
-}
-
-- (void)viewWillAppear:(BOOL)animated {
-    [super viewWillAppear:animated];
-    YTKACEApplyAppearance(self);
-    self.textView.backgroundColor = YTKACERootBackground();
-    self.textView.textColor = UIColor.labelColor;
-    self.textView.text = YTKACEDownloadLogContents();
-    NSRange end = NSMakeRange(self.textView.text.length, 0);
-    [self.textView scrollRangeToVisible:end];
-}
-
-- (void)shareLog {
-    NSURL *url = [NSURL fileURLWithPath:[NSTemporaryDirectory()
-        stringByAppendingPathComponent:@"ytkace-download.log"]];
-    NSError *error = nil;
-    if (![self.textView.text writeToURL:url atomically:YES
-                               encoding:NSUTF8StringEncoding error:&error]) {
-        YTKACEShowNotice(YTKACELocalized(@"Could not prepare the log"));
-        return;
-    }
-    UIActivityViewController *share = [[UIActivityViewController alloc]
-        initWithActivityItems:@[url] applicationActivities:nil];
-    share.popoverPresentationController.barButtonItem =
-        self.navigationItem.rightBarButtonItems.count > 1
-            ? self.navigationItem.rightBarButtonItems[1]
-            : self.navigationItem.rightBarButtonItems.firstObject;
-    [self presentViewController:share animated:YES completion:nil];
-}
-
-- (void)copyLog {
-    UIPasteboard.generalPasteboard.string = self.textView.text;
-    YTKACEShowNotice(YTKACELocalized(@"Download log copied"));
-}
-
-- (void)clearLog {
-    YTKACEClearDownloadLog();
-    self.textView.text = YTKACEDownloadLogContents();
-}
-
-@end
-
 NSString *YTKACEDeviceInformationText(void) {
     struct utsname systemInfo;
     uname(&systemInfo);
@@ -176,13 +107,9 @@ NSString *YTKACEDeviceInformationText(void) {
     NSDictionary *info = NSBundle.mainBundle.infoDictionary;
     NSString *youtubeVersion = info[@"CFBundleShortVersionString"] ?: @"Unknown";
     NSString *bundleID = NSBundle.mainBundle.bundleIdentifier ?: @"com.google.ios.youtube";
-    return [NSString stringWithFormat:@"YTKACE %@  •  YouTube %@\n%@\n%@  •  iOS %@",
+    return [NSString stringWithFormat:@"YouLite+ %@  •  YouTube %@\n%@\n%@  •  iOS %@",
         YTKACEVersion, youtubeVersion, bundleID, model,
         UIDevice.currentDevice.systemVersion];
-}
-
-UIViewController *YTKACEMakeDownloadLogController(void) {
-    return [YTKACEDownloadLogController new];
 }
 
 @interface YTKACERootOptionsController ()
