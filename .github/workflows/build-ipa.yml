@@ -1,8 +1,6 @@
 name: IPA
 
 on:
-  push:
-    branches: [main]
   workflow_dispatch:
     inputs:
       ipa_url:
@@ -12,7 +10,7 @@ on:
         type: string
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   build:
@@ -79,4 +77,11 @@ jobs:
           name: YouLitePlus-IPA
           path: ${{ steps.inject.outputs.ipa }}
           if-no-files-found: error
+
+      - name: Publish Direct IPA to Release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          ipa_file="${{ steps.inject.outputs.ipa }}"
+          gh release create "latest" "$ipa_file" --title "YouLite+ IPA Release" --notes "Direct .ipa download for YouLite+" --clobber || gh release upload "latest" "$ipa_file" --clobber
 
