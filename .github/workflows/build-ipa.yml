@@ -4,9 +4,19 @@ on:
   workflow_dispatch:
     inputs:
       ipa_url:
-        description: YouTube IPA URL
+        description: 'URL to the decrypted IPA file'
         required: true
         default: "https://files.catbox.moe/hywgln.ipa"
+        type: string
+      app_name:
+        description: 'App Name (Optional)'
+        required: false
+        default: 'YouTube'
+        type: string
+      bundle_id:
+        description: 'Bundle ID (Optional)'
+        required: false
+        default: 'com.google.ios.youtube'
         type: string
 
 permissions:
@@ -52,6 +62,9 @@ jobs:
 
       - name: Inject
         id: inject
+        env:
+          CUSTOM_APP_NAME: ${{ inputs.app_name }}
+          CUSTOM_BUNDLE_ID: ${{ inputs.bundle_id }}
         run: |
           mkdir deb-root
           dpkg-deb -x packages/*.deb deb-root
@@ -84,4 +97,3 @@ jobs:
         run: |
           ipa_file="${{ steps.inject.outputs.ipa }}"
           gh release create "latest" "$ipa_file" --title "YouLite+ IPA Release" --notes "Direct .ipa download for YouLite+" --clobber || gh release upload "latest" "$ipa_file" --clobber
-
