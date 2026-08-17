@@ -82,10 +82,6 @@ static UIView *YTKACEFindSettingsControl(UIView *overlay, UIView *excluded) {
     CGFloat bestScore = -CGFLOAT_MAX;
     YTKACEFindSettingsControlInView(overlay, excluded, overlay,
                                     &best, &bestScore);
-    if (best == nil && overlay.window != nil) {
-        YTKACEFindSettingsControlInView(overlay.window, excluded, overlay,
-                                        &best, &bestScore);
-    }
     return best;
 }
 
@@ -150,11 +146,6 @@ static BOOL YTKACEAlignOverlayStack(UIView *overlay, UIStackView *stack) {
 
     BOOL ready = hasGearAlignment || stable >= 2;
     state[@"ready"] = @(ready);
-    if (!ready) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-            [overlay setNeedsLayout];
-        });
-    }
     return ready;
 }
 

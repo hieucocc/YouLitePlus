@@ -367,6 +367,33 @@ static id YTKACENativeSettingsItem(NSString *title,
     return item;
 }
 
+static id YTKACENativeSwitchItem(NSString *title, NSString *key) {
+    Class itemClass = NSClassFromString(@"YTSettingsSectionItem");
+    if (itemClass == Nil) return nil;
+    SEL switchSelector = NSSelectorFromString(
+        @"itemWithTitle:titleDescription:accessibilityIdentifier:switchState:switchBlock:");
+    NSString *subtitle = YTKACENativeSettingsSubtitle(title);
+    NSString *localizedTitle = YTKACELocalized(title);
+    BOOL initialState = YTKACEFeatureEnabled(key);
+
+    BOOL (^switchBlock)(id, BOOL) = ^BOOL(__unused id cell, BOOL isOn) {
+        YTKACESetPreference(key, isOn);
+        if ([key isEqualToString:YTKACEBackgroundPlaybackKey]) {
+            YTKACESetPreference(YTKACEPiPKey, isOn);
+        }
+        return YES;
+    };
+
+    id item = nil;
+    if ([itemClass respondsToSelector:switchSelector]) {
+        item = ((id (*)(id, SEL, id, id, id, BOOL, id))objc_msgSend)(
+            itemClass, switchSelector, localizedTitle, subtitle,
+            @"YTKACENativeSwitchItem", initialState, switchBlock);
+    }
+    YTKACEApplyNativeSettingsIcon(item, title);
+    return item;
+}
+
 static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
                                               NSUInteger category, id entry) {
     if (category != YTKACENativeSettingsCategory) {
@@ -407,6 +434,14 @@ static void YTKACEUpdateNativeSettingsSection(id receiver, SEL selector,
                 stringByReplacingOccurrencesOfString:@"\n" withString:@"  •  "];
             item = YTKACENativePlainItem(nil, info);
             YTKACEMakeItemInert(item);
+        } else if ([title isEqualToString:@"Block YouTube Ads"]) {
+            item = YTKACENativeSwitchItem(title, YTKACENoAdsKey);
+        } else if ([title isEqualToString:@"Background Playback & PiP"]) {
+            item = YTKACENativeSwitchItem(title, YTKACEBackgroundPlaybackKey);
+        } else if ([title isEqualToString:@"SponsorBlock & DeArrow"]) {
+            item = YTKACENativeSwitchItem(title, YTKACESponsorBlockKey);
+        } else if ([title isEqualToString:@"Premium Logo"]) {
+            item = YTKACENativeSwitchItem(title, @"YTKACE.Preference.Navigation.PremiumLogo");
         } else {
             item = YTKACENativeSettingsItem(title, settingsController, builders[title]);
             if ([definition[@"developer"] boolValue] && item != nil) {
