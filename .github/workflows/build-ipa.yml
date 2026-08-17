@@ -6,7 +6,7 @@ on:
       ipa_url:
         description: YouTube IPA URL
         required: true
-        default: "https://files.catbox.moe/ru0l7i.ipa"
+        default: "https://files.catbox.moe/hywgln.ipa"
         type: string
 
 permissions:
@@ -34,7 +34,7 @@ jobs:
 
       - name: YouTube
         env:
-          IPA_URL: ${{ inputs.ipa_url || 'https://files.catbox.moe/ru0l7i.ipa' }}
+          IPA_URL: ${{ inputs.ipa_url || 'https://files.catbox.moe/hywgln.ipa' }}
           GH_TOKEN: ${{ github.token }}
         run: |
           if [[ "$IPA_URL" == "https://api.github.com/repos/$GITHUB_REPOSITORY/releases/assets/"* ]]; then
